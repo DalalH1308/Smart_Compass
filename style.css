@@ -1,0 +1,218 @@
+/* ===== Smart Compass – עיצוב ===== */
+
+/* צבעי הערכה: כחול כהה, טורקיז ולבן */
+:root {
+  --navy-900: #071428;
+  --navy-800: #0b1f3a;
+  --navy-700: #12305a;
+  --navy-600: #1b4275;
+  --teal: #22d3c5;
+  --teal-dark: #0ea5a0;
+  --white: #ffffff;
+  --text-soft: #b9cbe3;
+  --success: #34d399;
+  --warn: #fbbf24;
+  --error: #f87171;
+  --radius: 20px;
+  --compass-size: min(78vw, 340px);
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: "Heebo", "Segoe UI", Arial, sans-serif;
+  color: var(--white);
+  background: radial-gradient(circle at 50% 0%, var(--navy-700) 0%, var(--navy-800) 45%, var(--navy-900) 100%);
+  background-color: var(--navy-900);
+  line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ----- כותרת ----- */
+.app-header { text-align: center; padding: 24px 16px 8px; }
+.logo { margin: 0; font-size: clamp(1.8rem, 7vw, 2.4rem); font-weight: 800; letter-spacing: .5px; }
+.logo span { color: var(--teal); }
+.subtitle { margin: 4px 0 0; color: var(--text-soft); font-size: .95rem; }
+
+/* ----- פריסה וכרטיסים ----- */
+.container {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 12px 16px 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  background: rgba(18, 48, 90, .55);
+  border: 1px solid rgba(34, 211, 197, .18);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+}
+
+.card h2 { margin: 0 0 8px; font-size: 1.15rem; color: var(--teal); }
+
+/* ----- כרטיס המצפן ----- */
+.compass-card {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  transition: border-color .3s;
+}
+.compass-card.is-demo { border: 2px dashed var(--warn); }
+
+.mode-badge {
+  font-size: .85rem; font-weight: 700;
+  padding: 4px 14px; border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.mode-idle   { color: var(--text-soft); }
+.mode-sensor { color: var(--success); background: rgba(52, 211, 153, .1); }
+.mode-demo   { color: var(--warn); background: rgba(251, 191, 36, .12); }
+
+.compass-wrap {
+  position: relative;
+  width: var(--compass-size);
+  height: var(--compass-size);
+  margin-top: 14px;
+}
+
+/* החוגה המסתובבת */
+.dial {
+  width: 100%; height: 100%;
+  display: block;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.dial-bg   { fill: var(--navy-800); stroke: var(--teal); stroke-width: 4; }
+.dial-ring { fill: none; stroke: rgba(255, 255, 255, .12); stroke-width: 1; }
+
+.tick       { stroke: rgba(255, 255, 255, .45); stroke-width: 1.5; }
+.tick-major { stroke: var(--white); stroke-width: 2.5; }
+.tick-num   { fill: var(--text-soft); font-size: 11px; font-family: inherit; text-anchor: middle; dominant-baseline: central; }
+
+.cardinal {
+  fill: var(--white);
+  font-size: 22px; font-weight: 800; font-family: inherit;
+  text-anchor: middle; dominant-baseline: central;
+}
+.cardinal-north { fill: var(--teal); font-size: 28px; }
+
+.needle-north { fill: var(--teal); }
+.needle-south { fill: rgba(255, 255, 255, .85); }
+
+/* מחוון קבוע בראש המצפן = הכיוון שאליו פונה הטלפון */
+.pointer {
+  position: absolute; top: -16px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 20px solid var(--white);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .5));
+  z-index: 2;
+}
+
+.center-dot {
+  position: absolute; top: 50%; left: 50%;
+  width: 16px; height: 16px; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--white);
+  border: 3px solid var(--navy-800);
+}
+
+.demo-watermark {
+  position: absolute; inset: auto 0 22%;
+  text-align: center;
+  font-weight: 800; font-size: 1.1rem; letter-spacing: 2px;
+  color: var(--warn);
+  pointer-events: none;
+}
+
+/* ----- קריאה מספרית ----- */
+.readout { text-align: center; }
+.degrees { font-size: clamp(2.6rem, 13vw, 3.4rem); font-weight: 800; line-height: 1.1; }
+.direction { font-size: 1.35rem; color: var(--teal); font-weight: 700; min-height: 1.6em; }
+
+/* ----- הודעות סטטוס ----- */
+.status {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: .95rem;
+  border-inline-start: 4px solid;
+  background: rgba(255, 255, 255, .05);
+}
+.status-info    { border-color: var(--teal);    }
+.status-success { border-color: var(--success); }
+.status-warn    { border-color: var(--warn);    background: rgba(251, 191, 36, .08); }
+.status-error   { border-color: var(--error);   background: rgba(248, 113, 113, .1); }
+
+/* ----- כפתורים ----- */
+.btn {
+  width: 100%;
+  min-height: 52px;
+  border: 0; border-radius: 14px;
+  font: inherit; font-size: 1.1rem; font-weight: 700;
+  cursor: pointer;
+  transition: transform .1s, filter .2s;
+}
+.btn:active { transform: scale(.98); }
+.btn:focus-visible { outline: 3px solid var(--white); outline-offset: 3px; }
+.btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: var(--navy-900); }
+.btn-primary.is-running { background: transparent; color: var(--teal); border: 2px solid var(--teal); }
+
+/* ----- מצב הדגמה ----- */
+.demo-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.demo-head h2 { margin: 0; }
+.demo-note { color: var(--text-soft); font-size: .92rem; margin: 10px 0; }
+.demo-note strong { color: var(--warn); }
+.slider-label { display: block; margin-bottom: 6px; font-weight: 500; }
+
+/* מתג הפעלה */
+.switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch-track {
+  position: relative; width: 48px; height: 28px; border-radius: 999px;
+  background: var(--navy-600); transition: background .2s;
+}
+.switch-track::after {
+  content: ""; position: absolute; top: 3px; right: 3px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--white); transition: transform .2s;
+}
+.switch input:checked + .switch-track { background: var(--warn); }
+.switch input:checked + .switch-track::after { transform: translateX(-20px); }
+.switch input:focus-visible + .switch-track { outline: 3px solid var(--white); outline-offset: 2px; }
+
+/* סליידר */
+.slider { width: 100%; height: 32px; accent-color: var(--warn); direction: ltr; }
+.slider:disabled { opacity: .4; }
+
+/* ----- טיפים ----- */
+.info-card ul { margin: 0; padding-inline-start: 20px; color: var(--text-soft); font-size: .93rem; }
+.info-card li { margin-bottom: 6px; }
+.info-card strong { color: var(--white); }
+
+/* ----- פוטר ----- */
+.app-footer { text-align: center; color: var(--text-soft); font-size: .8rem; padding: 8px 16px 24px; opacity: .7; }
+
+/* מסכים רחבים: מצפן מעט גדול יותר */
+@media (min-width: 768px) {
+  :root { --compass-size: 360px; }
+  .container { padding-top: 20px; }
+}
+
+/* כיבוד העדפת הפחתת תנועה */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

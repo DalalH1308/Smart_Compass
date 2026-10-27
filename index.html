@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1f3a">
+  <meta name="description" content="Smart Compass – מצפן חכם המשתמש בחיישני הכיוון של הטלפון">
+  <title>Smart Compass – מצפן חכם</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="logo">Smart <span>Compass</span></h1>
+    <p class="subtitle">מצפן חכם המבוסס על חיישני הכיוון של הטלפון</p>
+  </header>
+
+  <main class="container">
+    <!-- כרטיס המצפן הראשי -->
+    <section id="compassCard" class="card compass-card" aria-labelledby="compassTitle">
+      <h2 id="compassTitle" class="visually-hidden">מצפן</h2>
+
+      <!-- תווית מקור הנתונים: לא פעיל / חיישן אמיתי / הדגמה -->
+      <div id="modeBadge" class="mode-badge mode-idle">המצפן אינו פעיל</div>
+
+      <div class="compass-wrap">
+        <!-- המחוון הקבוע מסמן את הכיוון שאליו פונה החלק העליון של הטלפון -->
+        <div class="pointer" aria-hidden="true"></div>
+
+        <!-- החוגה מסתובבת כך שהאות צ' תמיד מצביעה לצפון -->
+        <svg id="dial" class="dial" viewBox="0 0 300 300" aria-hidden="true">
+          <circle class="dial-bg" cx="150" cy="150" r="146"></circle>
+          <circle class="dial-ring" cx="150" cy="150" r="104"></circle>
+          <g id="ticks"></g>
+          <text class="cardinal cardinal-north" x="150" y="64">צ</text>
+          <text class="cardinal" x="236" y="150">מז</text>
+          <text class="cardinal" x="150" y="236">ד</text>
+          <text class="cardinal" x="64" y="150">מע</text>
+          <path class="needle-north" d="M150 72 L161 150 L139 150 Z"></path>
+          <path class="needle-south" d="M150 228 L161 150 L139 150 Z"></path>
+        </svg>
+
+        <div class="center-dot" aria-hidden="true"></div>
+        <div id="demoWatermark" class="demo-watermark" hidden>הדגמה</div>
+      </div>
+
+      <!-- קריאת הכיוון במספרים ובמילים -->
+      <div class="readout" aria-live="polite">
+        <div class="degrees"><span id="degrees" dir="ltr">--°</span></div>
+        <div id="directionText" class="direction">—</div>
+      </div>
+
+      <div id="status" class="status status-info" role="status">
+        לחצו על "הפעל מצפן" כדי להתחיל. ייתכן שהדפדפן יבקש הרשאה לגישה לחיישני התנועה.
+      </div>
+
+      <button id="startBtn" class="btn btn-primary" type="button">הפעל מצפן</button>
+    </section>
+
+    <!-- מצב הדגמה ידני -->
+    <section class="card demo-card" aria-labelledby="demoTitle">
+      <div class="demo-head">
+        <h2 id="demoTitle">מצב הדגמה ידני</h2>
+        <label class="switch">
+          <input id="demoToggle" type="checkbox">
+          <span class="switch-track" aria-hidden="true"></span>
+          <span class="switch-label">הפעל הדגמה</span>
+        </label>
+      </div>
+      <p class="demo-note">
+        ⚠ במצב זה הכיוון נקבע באמצעות הסליידר בלבד – <strong>זה אינו נתון חיישן אמיתי</strong>.
+        מתאים לבדיקה במחשב או במכשיר ללא חיישנים.
+      </p>
+      <label for="demoSlider" class="slider-label">
+        כיוון מדומה: <span id="demoValue" dir="ltr">0°</span>
+      </label>
+      <input id="demoSlider" class="slider" type="range" min="0" max="359" step="1" value="0" disabled>
+    </section>
+
+    <!-- טיפים ומידע -->
+    <section class="card info-card" aria-labelledby="infoTitle">
+      <h2 id="infoTitle">טיפים לשימוש</h2>
+      <ul>
+        <li>החזיקו את הטלפון שטוח, במקביל לרצפה, עם המסך כלפי מעלה.</li>
+        <li>הכיוון המוצג הוא ביחס ל<strong>צפון המגנטי</strong> (ההפרש מהצפון הגיאוגרפי בישראל קטן, כ-5°).</li>
+        <li>התרחקו ממגנטים, רמקולים, מחשבים ומבני מתכת – הם משבשים את המצפן.</li>
+        <li>אם הקריאה לא יציבה, כיילו את החיישן בתנועת "שמונה" באוויר.</li>
+        <li>החיישנים פועלים רק באתר מאובטח (<span dir="ltr">HTTPS</span>), למשל ב-GitHub Pages.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    Smart Compass · אתר סטטי · <span dir="ltr">DeviceOrientation API</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
